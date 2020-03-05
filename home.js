@@ -7,7 +7,7 @@ var currCount = 0;
 table = document.getElementById("table");
 
 var cors_anywhere_url = 'https://cors-anywhere.herokuapp.com/';
-var yelp_search_url = cors_anywhere_url + "https://api.yelp.com/v3/businesses/search?latitude=LAT&longitude=LONG";
+var yelp_search_url = cors_anywhere_url + "https://api.yelp.com/v3/businesses/search?latitude=LAT&longitude=LONG&limit=50";
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -72,9 +72,13 @@ function display(body){
   else {
     count = num;
   }
+  if (50 < count + currCount) {
+    currCount = 0;
+  }
   var i;
   for (i = currCount; i < count + currCount; i++)
   {
+    console.log(body.businesses[i]);
     var latn = parseFloat(body.businesses[i].coordinates.latitude);
     var longn = parseFloat(body.businesses[i].coordinates.longitude);
 
@@ -83,11 +87,27 @@ function display(body){
 
     var newRow = table.insertRow(table.length);
     var cell0 = newRow.insertCell(0);
-    cell0.innerHTML = body.businesses[i].name + "   ";
+    cell0.innerHTML = body.businesses[i].name;
     var cell1 = newRow.insertCell(1);
-    cell1.innerHTML = body.businesses[i].location.address1 + "   ";
+    cell1.innerHTML = body.businesses[i].location.address1;
     var cell2 = newRow.insertCell(2);
     cell2.innerHTML = body.businesses[i].rating;
+    var cell3 = newRow.insertCell(3);
+    if (typeof(body.businesses[i].phone) === 'undefined')
+    {
+      cell3.innerHTML = "N/A";
+    }
+    else {
+      cell3.innerHTML = body.businesses[i].phone;
+    }
+    var cell4 = newRow.insertCell(4);
+    if (typeof(body.businesses[i].price) === 'undefined')
+    {
+      cell4.innerHTML = "N/A";
+    }
+    else {
+      cell4.innerHTML = body.businesses[i].price;
+    }
 
   }
   load.innerHTML = "";
@@ -140,6 +160,8 @@ function resetTable() {
 function restart() {
   document.getElementById("home").style.display="block";
 	document.getElementById("new").style.display="none";
+  lat.innerHTML = "";
+  long.innerHTML = "";
   resetTable();
   currCount = 0;
   initMap();

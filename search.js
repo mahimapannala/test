@@ -1,9 +1,9 @@
+var cors_anywhere_url = 'https://cors-anywhere.herokuapp.com/';
+var yelp_search_url = cors_anywhere_url + "https://api.yelp.com/v3/businesses/search?latitude=LAT&longitude=LONG";
+
 var lat = document.getElementById("lat");
 var long = document.getElementById("long");
 var curr = document.getElementById("curr");
-
-var cors_anywhere_url = 'https://cors-anywhere.herokuapp.com/';
-var yelp_search_url = cors_anywhere_url + "https://api.yelp.com/v3/businesses/search?latitude=LAT&longitude=LONG&categories=restaurants";
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -33,7 +33,6 @@ function initMap() {
 }
 
 function display(body){
-  console.log(body);
   var latf = parseFloat(lat.innerHTML);
   var longf = parseFloat(long.innerHTML);
 
@@ -55,7 +54,7 @@ function display(body){
     var longn = parseFloat(body.businesses[i].coordinates.longitude);
 
     var pos = {lat: latn, lng: longn}
-    var marker = new google.maps.Marker({position: pos, map: map})
+    var marker = new google.maps.Marker({position = pos, map: map})
   }
 }
 

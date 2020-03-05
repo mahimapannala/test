@@ -15,12 +15,12 @@
   <body>
     <div id = "home">
       <div class="text-center mb-4">
-        <h1 class="h3 mb-3 font-weight-normal" style="margin-top: 100px">Welcome to Restaurant Chooser</h1>
+        <h1 class="h1 mb-3 font-weight-normal" style="margin-top: 100px">Welcome to Eat Complete</h1>
       </div>
     <form class="form-signin">
 
 
-      <p align="center">Enter a city or zip code OR use current location to continue</p>
+      <p align="center" class="h5 mb-3 font-weight-normal">Enter a city or zip code or use current location to begin your search</p>
 
       <div class="form-label-group">
         <input type="text" id="inputCity" class="form-control" placeholder="City or Zip Code" required autofocus>
@@ -33,7 +33,8 @@
     </form>
     </div>
     <div id = "new" style="display:none;">
-      <h1 class="h3 mb-3 font-weight-normal" style="margin-bottom: 25px"><center>Restaurant Chooser</center></h1>
+      <h1 class="h1 mb-3 font-weight-normal" style="margin-bottom: 5px"><center>Eat Complete</center></h1>
+      <h1 class="h4 mb-3 font-weight-normal" style="margin-bottom: 25px"><center>Click find restaurants to begin your search or restart search to use a different location</center></h1>
       <div class="row">
         <div class="col-md-6">
           <table id="table">
@@ -41,6 +42,8 @@
               <th>Business</th>
               <th>Address</th>
               <th>Rating</th>
+              <th>Phone #</th>
+              <th>Price</th>
             </tr>
           </table>
         </div>
@@ -51,7 +54,7 @@
           <p hidden id="long">empty</p>
           <p id="curr"></p>
 
-          <button type="button" class="btn btn-lg btn-primary btn-block" onClick="performSearch()">Find Restaurant Options</button>
+          <button type="button" class="btn btn-lg btn-primary btn-block" onClick="performSearch()">Find Restaurants</button>
           <button type="button" class="btn btn-lg btn-primary btn-block" onClick="restart()">Restart Search</button>
         </div>
         <p id="load"></p>
