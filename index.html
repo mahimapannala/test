@@ -8,7 +8,6 @@
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- Custom styles for this template -->
-    <link href="main.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="home.css">
   </head>
 
@@ -20,13 +19,18 @@
     <form class="form-signin">
 
 
-      <p align="center" class="h5 mb-3 font-weight-normal">Enter a city or zip code or use current location to begin your search</p>
+      <p align="center" class="h5 mb-3 font-weight-normal">Enter a category of restaurants (<a href="cat.html">list of valid categories</a>) or leave blank to search for all restaurants</p>
+
+
 
       <div class="form-label-group">
+        <input type="text" id="inputCat" style="margin-bottom: 15px" class="form-control" placeholder="Category of Restaurants" required autofocus>
+        <p align="center" class="h5 mb-3 font-weight-normal">Next, enter a city or zip code or use current location to begin your search</p>
         <input type="text" id="inputCity" class="form-control" placeholder="City or Zip Code" required autofocus>
       </div>
 
       <button class="btn btn-lg btn-primary btn-block" type="button" onclick="changeCity()">Select Location</button>
+
 
       <button class="btn btn-lg btn-primary btn-block" type="button" onclick="changeCurr()" style="margin-top: 50px">Use Current Location</button>
 
@@ -34,7 +38,8 @@
     </div>
     <div id = "new" style="display:none;">
       <h1 class="h1 mb-3 font-weight-normal" style="margin-bottom: 5px"><center>Eat Complete</center></h1>
-      <h1 class="h4 mb-3 font-weight-normal" style="margin-bottom: 25px"><center>Click find restaurants to begin your search or restart search to use a different location</center></h1>
+      <h1 class="h4 mb-3 font-weight-normal" style="margin-bottom: 0px"><center>Click find restaurants to begin your search or load more results</center></h1>
+      <h1 class="h4 mb-3 font-weight-normal" style="margin-bottom: 0px"><center>Restart search to use a different location or category</center></h1>
       <div class="row">
         <div class="col-md-6">
           <table id="table">
@@ -42,8 +47,8 @@
               <th>Business</th>
               <th>Address</th>
               <th>Rating</th>
-              <th>Phone #</th>
               <th>Price</th>
+              <th>Phone #</th>
             </tr>
           </table>
         </div>
@@ -52,6 +57,7 @@
 
           <p hidden id="lat">empty</p>
           <p hidden id="long">empty</p>
+          <p hidden id="category">empty</p>
           <p id="curr"></p>
 
           <button type="button" class="btn btn-lg btn-primary btn-block" onClick="performSearch()">Find Restaurants</button>

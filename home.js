@@ -1,13 +1,22 @@
 var lat = document.getElementById("lat");
 var long = document.getElementById("long");
+var cat = "restaurants";
 var curr = document.getElementById("curr");
 var load = document.getElementById("load");
 var city;
 var currCount = 0;
-table = document.getElementById("table");
+var table = document.getElementById("table");
+var validcategories = ["restaurants", "afghani", "african", "newamerican", "tradamerican", "andalusian", "arabian", "argentine", "armenian", "asianfusion", "asturian", "australian", "austrian", "baguettes", "bangladeshi", "bbq", "basque", "bavarian", "beergarden", "beerhall",
+"beisl", "belgian", "bistros", "blacksea", "brasseries", "brazilian", "breakfast_brunch", "british", "buffets", "bulgarian", "burgers", "burmese", "cafes", "cafeteria", "cajun", "cambodian", "newcanadian", "canteen", "caribbean", "catalan", "cheesesteaks", "chickenshop", "chicken_wings", "chilean",
+"chinese", "comfortfood", "corsican", "creperies", "cuban", "currysausage", "cypriot", "czech", "czechslovakian", "danish", "delis", "diners", "dinnertheater", "dumplings", "eastern_european", "eritrean", "ethiopian", "hotdogs", "filipino", "fischbroetchen", "fishnchips", "flatbread", "fondue", "food_court",
+"foodstands", "freiduria", "french", "sud_ouest", "galician", "gamemeat", "gastropubs", "georgian", "german", "giblets", "gluten_free", "greek", "guamanian", "halal", "hawaiian", "heuriger", "himalayan", "honduran", "hkcafe", "hotdog", "hotpot", "hungarian", "iberian", "indpak", "indonesian", "international",
+"irish", "island_pub", "israeli", "italian", "japanese", "jewish", "kebab", "kopitiam", "korean", "kosher", "kurdish", "loas", "loatian", "latin", "raw_food", "lyonnais", "malaysian", "meatballs", "mediterranean", "mexican", "mideastern", "milkbars", "modern_australian", "modern_european", "mongolian",
+"moroccan", "newmexican", "newzealand", "nicaraguan", "nightfood", "nikkei", "noodles", "norcinerie", "opensandwiches", "oriental", "pfcomercial", "pakistani", "panasian", "eltern_cafes", "parma", "persian", "peruvian", "pita", "pizza", "polish", "polynesian", "popuprestaurants", "portuguese", "potatoes",
+"poutineries", "pubfood", "riceshop", "romanian", "rotisserie_chicken", "russian", "salad", "sandwiches", "scandinavian", "schnitzel", "scottish", "seafood", "serbocroatian", "signature_cuisine", "singaporean", "slovakian", "somali", "soulfood", "soup", "southern", "spanish", "srilankan", "steak", "supperclubs",
+"sushi", "swabian", "swedish", "swissfood", "syrian", "tabernas", "taiwanese", "tapas", "tapasmallplates", "tavolacalda", "tex-mex", "norwegian", "traditional_swedish", "trattorie", "turkish", "ukrainian", "uzbek", "vegan", "vegetarian", "venison", "vietnamese", "waffles", "wok", "wraps", "yugoslav"];
 
 var cors_anywhere_url = 'https://cors-anywhere.herokuapp.com/';
-var yelp_search_url = cors_anywhere_url + "https://api.yelp.com/v3/businesses/search?latitude=LAT&longitude=LONG&limit=50";
+var yelp_search_url = cors_anywhere_url + "https://api.yelp.com/v3/businesses/search?latitude=LAT&longitude=LONG&limit=50&categories=CAT";
 
 function getLocation() {
   if (navigator.geolocation) {
@@ -44,7 +53,7 @@ function initMap() {
 
   var cent = {lat: latf, lng: longf};
 
-  var map = new google.maps.Map(document.getElementById('map'), {zoom: 13, center: cent});
+  var map = new google.maps.Map(document.getElementById('map'), {zoom: 12, center: cent});
 
   // var marker = new google.maps.Marker({position: uluru, map: map});
 }
@@ -58,10 +67,16 @@ function display(body){
 
   var cent = {lat: latf, lng: longf};
 
-  var map = new google.maps.Map(document.getElementById('map'), {zoom: 13, center: cent});
+  var map = new google.maps.Map(document.getElementById('map'), {zoom: 12, center: cent});
 
   var count;
-  if (body.total < num) {
+  if (body.total == 0) {
+    count = 0;
+    var newRow = table.insertRow(table.length);
+    var cell0 = newRow.insertCell(0);
+    cell0.innerHTML = "No restaurants available";
+  }
+  else if (body.total < num) {
     count = body.total;
     currCount = 0;
   }
@@ -92,21 +107,22 @@ function display(body){
     cell1.innerHTML = body.businesses[i].location.address1;
     var cell2 = newRow.insertCell(2);
     cell2.innerHTML = body.businesses[i].rating;
+
     var cell3 = newRow.insertCell(3);
-    if (typeof(body.businesses[i].phone) === 'undefined')
-    {
-      cell3.innerHTML = "N/A";
-    }
-    else {
-      cell3.innerHTML = body.businesses[i].phone;
-    }
-    var cell4 = newRow.insertCell(4);
     if (typeof(body.businesses[i].price) === 'undefined')
     {
-      cell4.innerHTML = "N/A";
+      cell3.innerHTML = " ";
     }
     else {
-      cell4.innerHTML = body.businesses[i].price;
+      cell3.innerHTML = body.businesses[i].price;
+    }
+    var cell4 = newRow.insertCell(4);
+    if (typeof(body.businesses[i].phone) === 'undefined')
+    {
+      cell4.innerHTML = " ";
+    }
+    else {
+      cell4.innerHTML = body.businesses[i].phone;
     }
 
   }
@@ -121,8 +137,11 @@ function performSearch() {
   load.innerHTML = "Currently Loading";
   var latitude = parseFloat(lat.innerHTML);
   var longitude = parseFloat(long.innerHTML);
+  console.log(cat);
   var search_url = yelp_search_url.replace("LAT",latitude);
   var search_url = search_url.replace("LONG",longitude);
+  var search_url = search_url.replace("CAT",cat);
+  console.log(search_url);
   var xhr = new XMLHttpRequest();
   xhr.open('GET', search_url, true);
 
@@ -136,13 +155,30 @@ function performSearch() {
 }
 
 function changeCity() {
+  cat = document.getElementById("inputCat").value;
+  if (cat == "")
+    cat = "restaurants";
+
+  city = document.getElementById("inputCity").value;
+  if (city == "") {
+    alert("Enter a location");
+    return false;
+  };
   document.getElementById("home").style.display="none";
 	document.getElementById("new").style.display="block";
-  city = document.getElementById("inputCity").value;
   nearByEventsMap();
 }
 
 function changeCurr() {
+  cat = document.getElementById("inputCat").value;
+  if (cat == "")
+    cat = "restaurants";
+  if (!validcategories.includes(cat)) {
+    alert("Enter a valid category");
+    return false;
+  }
+  console.log(cat);
+
   document.getElementById("home").style.display="none";
 	document.getElementById("new").style.display="block";
   getLocation();
