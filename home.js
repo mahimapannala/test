@@ -158,6 +158,10 @@ function changeCity() {
   cat = document.getElementById("inputCat").value;
   if (cat == "")
     cat = "restaurants";
+  if (!validcategories.includes(cat)) {
+    alert("Enter a valid category");
+    return false;
+  }
 
   city = document.getElementById("inputCity").value;
   if (city == "") {
